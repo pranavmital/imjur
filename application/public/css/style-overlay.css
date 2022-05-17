@@ -8,3 +8,15 @@
 #flash-message div {
   text-align: center;
 }
+
+#custom-footer {
+  position: fixed;
+  bottom: 0%;
+  width: 100%;
+  left: 50%;
+  transform: translate(-50%,0);
+  text-align: center;
+  max-width: 1140px;
+  padding-top: 20px;
+}
+

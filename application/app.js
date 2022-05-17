@@ -7,6 +7,7 @@ const logger = require("morgan");
 const handlebars = require("express-handlebars");
 var flash = require('express-flash');
 const indexRouter = require("./routes/index");
+const postsRouter = require("./routes/posts");
 const usersRouter = require("./routes/users");
 
 // --- these are the ones I've added:
@@ -83,6 +84,7 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter); // route middleware from ./routes/index.js
 app.use("/users", usersRouter); // route middleware from ./routes/users.js
+app.use("/posts", postsRouter);
 
 
 /**

@@ -4,8 +4,8 @@ var db = require('../config/database');
 var bcrypt = require('bcrypt');
 
 
-const { errorPrint, successPrint } = require('../helpers/debug/debugprinters')
-const UserError = require('../helpers/error/UserError')
+const { errorPrint, successPrint } = require('../helpers/debug/debugprinters');
+const UserError = require('../helpers/error/UserError');
 
 
 /* GET users listing. */
