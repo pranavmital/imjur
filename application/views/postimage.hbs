@@ -1,0 +1,57 @@
+<div class="row" style="margin-top:80px">
+
+    <div class="col-sm-3"></div>
+
+    <div class="col-sm-6">
+        <h3>Post an image!</h3>
+        <br>
+
+        <form>
+            
+            <div class="form-group">    
+                <label for="post-title-input">Post Title</label>
+                <input id="post-title-input" class="form-control" type="text"/>
+            </div>
+                
+            <div class="form-group">    
+                <label for="post-desc-input">Post Description</label>
+                <input id="post-desc-input" class="form-control" type="text"/>
+            </div>
+
+            <!-- 
+            
+            this is the bootstrap style of a file input,
+            I didn't like it for many reasons — but still leaving it here
+                
+            <div class="form-group">
+                <label>Choose image to upload from your computer</label>
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="image-input" accept="image/*">
+                    <label class="custom-file-label" for="image-input">Choose image</label>
+                    </div>
+                </div>
+            </div> -->
+
+
+            <div class="form-group">
+                <label>Choose image to upload from your computer</label>
+                <input type="file" id="image-input" accept="image/*">
+            </div>
+            <br>
+
+
+            <div class="form-group form-check">
+                <input id="image-policy-checkbox" type="checkbox" class="form-check-input"></input>
+                <label for="image-policy-checkbox">I accept the <strong> Acceptable Use Policy </strong>for uploading images.</label>
+            </div>
+
+            <button class="btn btn-secondary" type="reset">Clear</button> 
+            <button class="btn btn-primary" type="submit">Post</button>
+
+        </form>
+    </div>
+
+    <div class="col-sm-3"></div>
+
+</div>

@@ -1,0 +1,10 @@
+#flash-message {
+  position: fixed;
+  left: 50%;
+  bottom: 15%;
+  transform: translate(-50%,0);
+}
+
+#flash-message div {
+  text-align: center;
+}

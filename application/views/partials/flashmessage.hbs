@@ -1,0 +1,11 @@
+<div id="flash-message">
+    {{#if messages.error }}
+    <div class="alert alert-danger" id="flash-error" role="alert">
+    {{messages.error}}
+    </div>
+    {{else}}
+    <div class="alert alert-success" id="flash-success" role="alert">
+    {{messages.success}}
+    </div>
+    {{/if}}
+</div>

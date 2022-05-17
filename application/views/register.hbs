@@ -1,0 +1,52 @@
+<div class="row" style="margin-top: 80px; margin-bottom: 60px">
+
+    <div class="col-sm-4"></div>
+
+    <div class="col-sm-4">
+        <h3>Please create an account!</h3>
+        <br>
+            <!-- onsubmit="validate_registration(event)" -->
+        <form method="POST" action="/users/register" enctype="application/x-www-form-urlencoded" >
+
+            <div class="form-group">
+                <label for="username-input">Username</label>
+                <input id="username-input" class="form-control" type="text" name="username" required/>
+            </div>
+
+            <div class="form-group">    
+                <label for="email-input">Email</label>
+                <input id="email-input" class="form-control" type="email" name="email" required/>
+            </div>
+            
+            <div class="form-group">    
+                <label for="password-input">Password</label>
+                <input id="password-input" class="form-control" type="password" name="password" required/>
+            </div>
+
+            <div class="form-group">    
+                <label for="confirm-password">Confirm Password</label>
+                <input id="confirm-password" class="form-control" type="password" name="cpassword" required/>
+            </div>
+
+            <div class="form-group form-check">    
+                <input id="age-checkbox" class="form-check-input" type="checkbox" required/>
+                <label for="age-checkbox">By checking this box, I verify that <strong>I am at least 13 years old</strong>.</label>
+            </div>
+
+            <div class="form-group form-check">    
+                <input id="privacy-checkbox" class="form-check-input" type="checkbox" required/>
+                <label for="privacy-checkbox" class="txt-label">I accept the <a href="">TOS and Privacy Rules</a>.</label>
+            </div>
+            
+            <button class="btn btn-secondary" type="reset">Clear</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
+    
+        </form>
+
+        <br>
+        <p>Already have an account? <a href="/login">Log in</a> instead.</p>
+
+    </div>
+
+<div class="col-sm-4"></div>
+

@@ -1,11 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
   <head>
-    <title>{{title}}</title>
-    <link rel="icon" href="/public/favicon.ico" sizes="70x70" type="image/ico">
-    <link rel='stylesheet' href='/public/stylesheets/style.css' />
+      <meta charset="UTF-8">
+      <title>{{title}}</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" href="/public/favicon.ico" sizes="70x70" type="image/ico">
+
+      <!-- bootstrap4 stylesheet -->
+      <link rel="stylesheet" type="text/css" href="public/css/style.css">
+      <link rel="stylesheet" type="text/css" href="public/css/style-overlay.css">
+
+      <!-- fronted JS file -->
+      <script defer type="text/javascript" src="public/js/frontend.js"></script>
+      
+
   </head>
+
   <body>
-    {{{body}}}
+    <div class="container-fluid">
+      {{> navbar}}
+
+      {{#if (emptyObject messages)}}
+      <!-- flash message component is rendered if there is a message -->
+      {{> flashmessage}}
+      {{/if}}
+
+      {{{body}}}
+    </div>
+
+  <!-- script to initiate POST method for logout and then refresh page -->
+  {{#if logged}}
+  <script>
+      let ele = document.getElementById('logout-button');
+      if(ele) {
+          ele.onclick = (e) => {
+              fetch('/users/logout', {method: "POST"
+              })
+              .then((data) => {
+                  location.replace('/');
+              })
+          }
+      }
+  </script>
+  {{/if}}
+
   </body>
+
 </html>
