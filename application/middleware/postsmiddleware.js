@@ -40,24 +40,12 @@ postMiddleware.getCommentsByPostId = async function(req, res, next) {
     let postId = req.params.id;
 
     try {
-
+        let results = await getCommentsForPost(postId);
+        res.locals.currentPost.comments = results;
         next();
     } catch (error) {
         next(err);
     }
-
 }
-
-    //     let baseSQL = 'SELECT id, title, description, thumbnail, created FROM posts ORDER BY created DESC LIMIT 8';
-//     db.execute(baseSQL,[])
-//     .then(([results, fields]) => {
-//         res.locals.results = results;
-//         if(results && results.length == 0) {
-//             req.flash('error', 'No posts have been created yet.');
-//         } 
-//         next();
-//     })
-//     .catch((err) => next(err));
-// }
 
 module.exports = postMiddleware;

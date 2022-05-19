@@ -2,7 +2,7 @@ var db = require("../config/database");
 const CommentModel = {}
 
 CommentModel.create = (userId, postId, comment) => {
-    let baseSQL = `INSERT INTO comments (comment, fk_postid, fk_authorid) VALUES (?, ?, ?);`;
+    let baseSQL = `INSERT INTO comments (comment, fk_postid, fk_authorid, created) VALUES (?, ?, ?, now());`;
     return db.query(baseSQL, [comment, postId, userId])
     .then(([results, fields]) => {
         if(results && results.affectedRows) {

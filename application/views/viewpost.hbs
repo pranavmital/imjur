@@ -27,21 +27,17 @@
                 Comments
             </div>
             <ul class="list-group list-group-flush">
-                <div id="message">
-                    <li class="list-group-item">
-                        <h6>username-here</h6>
-                        text body here
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    </li>
-                </div>
-                <li class="list-group-item">
+
+                {{#each currentPost.comment}}
+                    {{> comment this}}
+                {{/each}}
+                <li class="list-group-item" id="message">
                     <h6>username-here</h6>
-                    Cras justo odio
+                    text body here
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </li>
-                <li class="list-group-item">
-                    <h6>username-here</h6>
-                    Cras justo odio
-                </li>
+
+                
             </ul>
         </div>
 
