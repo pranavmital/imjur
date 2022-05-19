@@ -1,4 +1,12 @@
-<div class="container">
-    <h1>{{title}}</h1>
+<div class="custom-grid-main" style="margin-top: 100px">
+    
+    
+    <div class="row" id="post-grid">
+        {{#each results}}
+        {{> card this}}
+        {{/each}}
+    </div>
+
+    <h1 style="margin-top: 80px;">{{title}}</h1>
     <p>Hello {{ name }}, Welcome to {{title}}</p>
 </div>

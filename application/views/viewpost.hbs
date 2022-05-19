@@ -1,0 +1,59 @@
+<!-- div class="row" style="height:60px;"></div> -->
+
+<div class="row" style="padding-bottom: 100px; padding-top:60px">
+
+    <div class="col-sm-7">
+        <div class="card">
+            <img src="/{{currentPost.photopath}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{currentPost.title}}</h5>
+                <p class="card-text">{{currentPost.description}}</p>
+                <!--<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+            </div>
+            <ul class="list-group list-group-flush">
+
+                <li class="list-group-item"><small>POST AUTHOR: </small>{{currentPost.username}}</li>
+                <li class="list-group-item"><small>TIME CREATED: </small>{{currentPost.created}}</li>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <div class="col-sm-5">
+
+        <div class="card">
+            <div class="card-header">
+                Comments
+            </div>
+            <ul class="list-group list-group-flush">
+                <div id="message">
+                    <li class="list-group-item">
+                        <h6>username-here</h6>
+                        text body here
+                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    </li>
+                </div>
+                <li class="list-group-item">
+                    <h6>username-here</h6>
+                    Cras justo odio
+                </li>
+                <li class="list-group-item">
+                    <h6>username-here</h6>
+                    Cras justo odio
+                </li>
+            </ul>
+        </div>
+
+
+        <form>
+            <div class="form-group">
+                <label style="margin-top: 40px;">Post your comment</label>
+                <textarea class="form-control" name="comment" id="comment-input" cols="30" rows="5"></textarea>
+                <button class="btn btn-primary" style="margin-top: 20px;">Post</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>

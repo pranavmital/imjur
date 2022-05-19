@@ -8,11 +8,11 @@
       <link rel="icon" href="/public/favicon.ico" sizes="70x70" type="image/ico">
 
       <!-- bootstrap4 stylesheet -->
-      <link rel="stylesheet" type="text/css" href="public/css/style.css">
-      <link rel="stylesheet" type="text/css" href="public/css/style-overlay.css">
+      <link rel="stylesheet" type="text/css" href="/public/css/style.css">
+      <link rel="stylesheet" type="text/css" href="/public/css/style-overlay.css">
 
       <!-- fronted JS file -->
-      <script defer type="text/javascript" src="public/js/frontend.js"></script>
+      <script defer type="text/javascript" src="/public/js/frontend.js"></script>
       
 
   </head>
@@ -20,13 +20,17 @@
   <body>
     <div class="container-fluid">
       {{> navbar}}
+      {{> banner}}
 
       {{#if (emptyObject messages)}}
       <!-- flash message component is rendered if there is a message -->
       {{> flashmessage}}
       {{/if}}
 
+      <div id="access-to-mainContent-of-page-in-dom">
       {{{body}}}
+      </div>
+
     </div>
 
   <!-- script to initiate POST method for logout and then refresh page -->

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../config/database');
+const UserModel = require("../models/Users")
 var bcrypt = require('bcrypt');
 
 
@@ -9,8 +10,8 @@ const UserError = require('../helpers/error/UserError');
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send({message: 'respond with a resource'});
+router.get('/', function (req, res, next) {
+  res.send({ message: 'respond with a resource' });
 });
 
 
@@ -21,42 +22,30 @@ router.post('/login', (req, res, next) => {
 
   /* Do server side validation here */
 
-  let baseSQL = "SELECT id, username, password FROM users WHERE username=?";
-  let userId;
-
-  db.execute(baseSQL, [username])
-  .then(([results, fields]) => {
-    if (results && results.length == 1) {
-      let hashedPassword = results[0].password;
-      userId = results[0].id;
-      return bcrypt.compare(password, hashedPassword); 
-    } else {
-      throw new UserError("Invalid username and/or password!", "/login", 200);
-    }
-  })
-  .then((passwordsMatched) => {
-    if (passwordsMatched) {
-      successPrint(`User ${username} is logged in`);
-      req.session.username = username;
-      req.session.userId = userId;
-      res.locals.logged = true;
-      req.flash('success', 'You have sucessfully logged in!');
-      res.redirect('/');
-    } else {
-      throw new UserError("Invalid username and/or password!", "/login", 200);
-    }
-  })
-  .catch((err) => {
-    errorPrint("user login failed");
-    if (err instanceof UserError) {
-      errorPrint(err.getMessage());
-      req.flash('error', err.getMessage());
-      res.status(err.getStatus());
-      res.redirect('/login')
-    } else {
-      next(err);
-    }
-  });
+  UserModel.authenticate(username, password)
+    .then((loggedUserId) => {
+      if (loggedUserId > 0) {
+        successPrint(`User ${username} is logged in`);
+        req.session.username = username;
+        req.session.userId = loggedUserId;
+        res.locals.logged = true;
+        req.flash('success', 'You have sucessfully logged in!');
+        res.redirect('/');
+      } else {
+        throw new UserError("Invalid username and/or password!", "/login", 200);
+      }
+    })
+    .catch((err) => {
+      errorPrint("user login failed");
+      if (err instanceof UserError) {
+        errorPrint(err.getMessage());
+        req.flash('error', err.getMessage());
+        res.status(err.getStatus());
+        res.redirect('/login')
+      } else {
+        next(err);
+      }
+    });
 
 });
 
@@ -70,6 +59,56 @@ router.post('/register', (req, res, next) => {
   * do server side validation here
   **/
 
+  UserModel.usernameExists(username)
+    .then((usernameDoesExist) => {
+      if (usernameDoesExist) {
+        throw new UserError(
+          "Registration Failed: Email already exists",
+          "/register",
+          200
+        );
+      } else {
+        return UserModel.emailExists(email);
+      }
+    })
+    .then((emailDoesExist) => {
+      if (emailDoesExist) {
+        throw new UserError(
+          "Registration Failed: Email already exists",
+          "/register",
+          200
+        );
+      } else {
+        return UserModel.create(username, password, email)
+      }
+    })
+    .then((createdUserId) => {
+      if (createdUserId < 0) {
+        throw new UserError(
+          "Serve Error, user could not be created",
+          "/register",
+          500
+        );
+      } else {
+        successPrint("users.js --> User was created!");
+        req.flash('success', "Your account has been created!");
+        res.redirect('/login');
+      }
+    })
+    .catch((err) => {
+      errorPrint("User could not be made", err);
+      if (err instanceof UserError) {
+        errorPrint(err.getMessage());
+        req.flash('error', err.getMessage());
+        res.status(err.getStatus());
+        res.redirect(err.getRedirectURL());
+      } else {
+        next(err);
+      }
+    });
+})
+
+/*
   return db.execute("SELECT * FROM users WHERE username=?", [username])
   .then(([results, fields]) => {
     if (results && results.length == 0) {
@@ -122,18 +161,19 @@ router.post('/register', (req, res, next) => {
     }
   });
 });
+*/
 
 router.post('/logout', (req, res, next) => {
-  req.session.destroy( (err) => {
+  req.session.destroy((err) => {
     if (err) {
       errorPrint('Session could not be destroyed.');
       next(err);
     } else {
       successPrint('Session was destroyed.');
       res.clearCookie('csid');
-      res.json({status: "OK", message: "user is logged out"});
+      res.json({ status: "OK", message: "user is logged out" });
     }
   });
-}); 
+});
 
 module.exports = router;

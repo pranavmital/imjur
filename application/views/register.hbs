@@ -1,12 +1,12 @@
-<div class="row" style="margin-top: 80px; margin-bottom: 60px">
+<div class="row" style="margin-top: 100px; margin-bottom: 60px">
 
     <div class="col-sm-4"></div>
 
     <div class="col-sm-4">
         <h3>Please create an account!</h3>
         <br>
-            <!-- onsubmit="validate_registration(event)" -->
-        <form method="POST" action="/users/register" enctype="application/x-www-form-urlencoded" >
+            
+        <form method="POST" action="/users/register" enctype="application/x-www-form-urlencoded" onsubmit="validate_registration(event)">
 
             <div class="form-group">
                 <label for="username-input">Username</label>
