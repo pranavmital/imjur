@@ -9,7 +9,7 @@ var {userIsLoggedIn} = require('../middleware/routeprotectors');
 
 /* GET home page. */
 router.get('/', getRecentPosts,function(req, res, next) {
-  res.render('index', { title: "Pranav's CSC 317 App" });
+  res.render('index', { title: "Imjur" });
 });
 
 router.use('/login', (req, res, next) => {
