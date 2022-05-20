@@ -9,7 +9,7 @@ var {userIsLoggedIn} = require('../middleware/routeprotectors');
 
 /* GET home page. */
 router.get('/', getRecentPosts,function(req, res, next) {
-  res.render('index', { title: 'CSC 317 App', name:"Pranav Mital" });
+  res.render('index', { title: "Pranav's CSC 317 App" });
 });
 
 router.use('/login', (req, res, next) => {
@@ -38,7 +38,7 @@ router.get('/postimage', (req, res, next) => {
 
 router.get("/post/:id(\\d+)", getPostById, getCommentsByPostId, (req, res, next) => {
  
-  res.render('viewpost');
+  res.render('viewpost',{title: "Detail View - Post"});
 
 });
 
