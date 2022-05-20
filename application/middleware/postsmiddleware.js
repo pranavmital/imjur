@@ -2,7 +2,7 @@ const { getRecentPosts, getPostById } = require("../models/Posts")
 const { getCommentsForPost } = require('../models/Comments');
 const postMiddleware = {}
 
-postMiddleware.getRecentPosts = async function(req, res, next) {
+postMiddleware.getRecentPosts = async function (req, res, next) {
 
     try {
         let results = await getRecentPosts(8);
@@ -12,15 +12,15 @@ postMiddleware.getRecentPosts = async function(req, res, next) {
         }
         next();
 
-    } catch(err) {
+    } catch (err) {
         next(err);
     }
 }
 
 
-postMiddleware.getPostById = async function(req, res, next) {
+postMiddleware.getPostById = async function (req, res, next) {
     try {
-        
+
         let results = await getPostById(req.params.id);
 
         if (results && results.length) {
@@ -36,7 +36,7 @@ postMiddleware.getPostById = async function(req, res, next) {
     }
 }
 
-postMiddleware.getCommentsByPostId = async function(req, res, next) {
+postMiddleware.getCommentsByPostId = async function (req, res, next) {
     let postId = req.params.id;
 
     try {
