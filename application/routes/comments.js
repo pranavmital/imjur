@@ -1,4 +1,4 @@
-var express = require('express')
+var express = require('express');
 var router = express.Router();
 const { successPrint, errorPrint } = require("../helpers/debug/debugprinters");
 const { create } = require('../models/Comments');
@@ -6,7 +6,7 @@ const { create } = require('../models/Comments');
 router.post('/create', (req, res, next) => {
     if (!req.session.username) {
         errorPrint('must be logged in to comment');
-        req.json({
+        res.json({
             code: -1,
             status: "danger",
             message: "Must be logged in to comment."
@@ -18,7 +18,7 @@ router.post('/create', (req, res, next) => {
 
         create(userId, postId, comment)
             .then((wasSuccessful) => {
-                if (wasSuccessful !== -1) {
+                if (wasSuccessful != -1) {
                     successPrint(`Comment was created by ${username}`);
                     res.json({
                         code: 1,
@@ -35,8 +35,8 @@ router.post('/create', (req, res, next) => {
                         message: "comment was not created",
                     })
                 }
-            }).catch((err) => next(err));
-
+            })
+            .catch((err) => next(err));
     }
 });
 

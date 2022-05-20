@@ -5,40 +5,40 @@ const { getRecentPosts, getPostById, getCommentsByPostId } = require('../middlew
 
 var db = require("../config/database");
 
-var {userIsLoggedIn} = require('../middleware/routeprotectors');
+var { userIsLoggedIn } = require('../middleware/routeprotectors');
 
 /* GET home page. */
-router.get('/', getRecentPosts,function(req, res, next) {
+router.get('/', getRecentPosts, function (req, res, next) {
   res.render('index', { title: "imjur" });
 });
 
 router.use('/login', (req, res, next) => {
-  if(/*isLoggedin*/false){
+  if (/*isLoggedin*/false) {
     res.render('dashboard')
-  } else{
-      next();
+  } else {
+    next();
   }
 });
 
 router.get('/login', (req, res, next) => {
-  res.render('login', {title: "Login"});
+  res.render('login', { title: "Login" });
 });
 
 router.get('/register', (req, res, next) => {
-  res.render('register', {title: "Register"});
+  res.render('register', { title: "Register" });
 });
 
 // implemented route protection for the /postimage path
 router.use('/postimage', userIsLoggedIn);
 
 router.get('/postimage', (req, res, next) => {
-  res.render('postimage', {title: "Post an Image"});
+  res.render('postimage', { title: "Post an Image" });
 });
 
 
 router.get("/post/:id(\\d+)", getPostById, getCommentsByPostId, (req, res, next) => {
- 
-  res.render('viewpost',{title: "Detail View - Post"});
+
+  res.render('viewpost', { title: "Detail View - Post" });
 
 });
 

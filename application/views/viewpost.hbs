@@ -24,17 +24,19 @@
             <div class="card-header">
                 Comments
             </div>
-            <ul class="list-group list-group-flush">
+            <ul class="list-group list-group-flush" id="messages">
 
-                {{#each currentPost.comment}}
+                {{#each currentPost.comments}}
                 {{> comment this}}
                 {{/each}}
+
+                <!-- this is the original code for an individual comment that has been turned into a partial
                 <li class="list-group-item" id="message">
                     <h6>username-here</h6>
                     text body here
                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </li>
-
+                -->
 
             </ul>
         </div>
@@ -43,11 +45,63 @@
         <form>
             <div class="form-group">
                 <label style="margin-top: 40px;">Post your comment</label>
-                <textarea class="form-control" name="comment" id="comment-input" cols="30" rows="5"></textarea>
-                <button class="btn btn-primary" style="margin-top: 20px;">Post</button>
+                <textarea class="form-control" name="comment" id="comment-input" cols="30" rows="5"
+                    placeholder="Enter comment here"></textarea>
+                <span id="comment-button" class="btn btn-primary" style="margin-top: 20px;">Post</span>
             </div>
         </form>
 
     </div>
 
 </div>
+
+<script>
+
+    // comments JS
+
+    function addMessage(data) {
+        let template = document.createElement('template');
+        template.innerHTML = 
+        `<li class="list-group-item" id="message">
+         <h6>@${data.username}</h6>
+         ${data.comment}
+         <p class="card-text"><small class="text-muted">${new Date().toLocaleString()}</small></p>
+        </li>`;
+
+        document.getElementById('messages').firstChild.before(template.content.firstChild);
+
+    }
+
+    document.getElementById('comment-button').onclick = (event) => {
+        let commentText = document.getElementById('comment-input').value;
+        let postId = document.location.pathname.match(/\d+/g).map(Number)[0];
+
+        if (!commentText) {
+            return;
+        }
+
+        let fetchOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "Application/json"
+            },
+            body: JSON.stringify({
+                comment: commentText,
+                postId: postId
+            })
+        }
+
+        fetch('/comments/create', fetchOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.code == 1) {
+                    addMessage(data);
+                } else {
+                    addFlashFromFrontEnd(data.message, data.status);
+                }
+            })
+            .catch(err => console.log(err));
+    }
+    
+
+</script>
