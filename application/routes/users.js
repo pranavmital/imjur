@@ -21,6 +21,9 @@ router.post('/login', (req, res, next) => {
   let password = req.body.password;
 
   /* Do server side validation here */
+  // about to do server side validation
+
+
 
   UserModel.authenticate(username, password)
     .then((loggedUserId) => {
@@ -55,58 +58,102 @@ router.post('/register', (req, res, next) => {
   let password = req.body.password;
   let cpassword = req.body.cpassword;
 
-  /** 
-  * do server side validation here
-  **/
+  // server side validation code begins
 
-  UserModel.usernameExists(username)
-    .then((usernameDoesExist) => {
-      if (usernameDoesExist) {
-        throw new UserError(
-          "Registration Failed: Email already exists",
-          "/register",
-          200
-        );
-      } else {
-        return UserModel.emailExists(email);
-      }
+  // Creating RegEx to check for presence of uppercase, numerical, and special character
+  let check_forUppercase = new RegExp("^(?=.*[A-Z])")
+  let check_forNumber = new RegExp("^(?=.*\\d)")
+  let check_forSpecialChar = new RegExp("^(?=.*[-+_!@#$%^&*., ?])")
+
+  // validate username
+  if (username.length < 3) {
+    req.flash('error', 'Your username must be at least 3 alphanumeric characters long!');
+    req.session.save(err => {
+      res.redirect('/register');
     })
-    .then((emailDoesExist) => {
-      if (emailDoesExist) {
-        throw new UserError(
-          "Registration Failed: Email already exists",
-          "/register",
-          200
-        );
-      } else {
-        return UserModel.create(username, password, email)
-      }
+  } else if (!((/[a-zA-Z]/).test(username.charAt(0)))) {
+    req.flash('error', 'Your username must begin with a character! (a-z or A-Z)');
+    req.session.save(err => {
+      res.redirect('/register');
     })
-    .then((createdUserId) => {
-      if (createdUserId < 0) {
-        throw new UserError(
-          "Serve Error, user could not be created",
-          "/register",
-          500
-        );
-      } else {
-        successPrint("users.js --> User was created!");
-        req.flash('success', "Your account has been created!");
-        res.redirect('/login');
-      }
+  } else if (password.length < 8) {
+    req.flash('error', 'Your password must be at least 8 characters long!');
+    req.session.save(err => {
+      res.redirect('/register');
     })
-    .catch((err) => {
-      errorPrint("User could not be made", err);
-      if (err instanceof UserError) {
-        errorPrint(err.getMessage());
-        req.flash('error', err.getMessage());
-        res.status(err.getStatus());
-        res.redirect(err.getRedirectURL());
-      } else {
-        next(err);
-      }
-    });
+  } else if (!(check_forUppercase.test(password))) {
+    req.flash('error', 'Your password must contain at least one uppercase character!')
+    req.session.save(err => {
+      res.redirect('/register');
+    })
+  } else if (!(check_forNumber.test(password))) {
+    req.flash('error', 'Your password must contain at least one number!')
+    req.session.save(err => {
+      res.redirect('/register');
+    })
+  } else if (!(check_forSpecialChar.test(password))) {
+    req.flash('error', 'Your password must contain at least one special character!')
+    req.session.save(err => {
+      res.redirect('/register');
+    })
+  } else if (!(password == cpassword)) {
+    req.flash('error', 'Passwords do not match!');
+    req.session.save(err => {
+      res.redirect('/register');
+    })
+  } else {
+
+    UserModel.usernameExists(username)
+      .then((usernameDoesExist) => {
+        if (usernameDoesExist) {
+          throw new UserError(
+            "Registration Failed: Email already exists",
+            "/register",
+            200
+          );
+        } else {
+          return UserModel.emailExists(email);
+        }
+      })
+      .then((emailDoesExist) => {
+        if (emailDoesExist) {
+          throw new UserError(
+            "Registration Failed: Email already exists",
+            "/register",
+            200
+          );
+        } else {
+          return UserModel.create(username, password, email)
+        }
+      })
+      .then((createdUserId) => {
+        if (createdUserId < 0) {
+          throw new UserError(
+            "Serve Error, user could not be created",
+            "/register",
+            500
+          );
+        } else {
+          successPrint("users.js --> User was created!");
+          req.flash('success', "Your account has been created!");
+          res.redirect('/login');
+        }
+      })
+      .catch((err) => {
+        errorPrint("User could not be made", err);
+        if (err instanceof UserError) {
+          errorPrint(err.getMessage());
+          req.flash('error', err.getMessage());
+          res.status(err.getStatus());
+          res.redirect(err.getRedirectURL());
+        } else {
+          next(err);
+        }
+      });
+
+  }
 })
+
 
 /*
   return db.execute("SELECT * FROM users WHERE username=?", [username])

@@ -91,6 +91,7 @@ function executeSearch() {
 
 }
 
+
 // frontend validation
 
 function validate_registration(e) {
@@ -144,4 +145,3 @@ function validate_registration(e) {
         e.preventDefault();
     }
 }
-
