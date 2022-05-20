@@ -7,6 +7,7 @@ var multer = require('multer');
 var crypto = require('crypto');
 var PostModel = require("../models/Posts")
 var PostError = require('../helpers/error/PostError');
+const e = require('express');
 
 
 var storage = multer.diskStorage({
@@ -23,42 +24,60 @@ var storage = multer.diskStorage({
 var uploader = multer({ storage: storage });
 
 router.post('/createpost', uploader.single('uploadImage'), (req, res, next) => {
-    let fileUploaded = req.file.path;
-    let fileAsThumbnail = `thumbnail-${req.file.filename}`;
-    let desinationOfThumbnail = req.file.destination + "/" + fileAsThumbnail;
+
     let title = req.body.title;
     let description = req.body.description;
-    let fk_userId = req.session.userId;
+    let fileForValidationCheck = req.file;
 
-    /* DO server side validation 
-    * title, description, file should not be undefined,
-    * because otherwise the eventual SQL we execute will fail.
-    */
+    // server-side validation
 
-    sharp(fileUploaded)
-        .resize(200)
-        .toFile(desinationOfThumbnail)
-        .then(() => {
-            return PostModel.create(title, description, fileUploaded, desinationOfThumbnail, fk_userId);
+    if (title == '' || title == null) {
+        req.flash('error', 'Please enter a title for your post.');
+        req.session.save(err => {
+            res.redirect('/postimage');
         })
-        .then((postWasCreated) => {
-            if (postWasCreated) {
-                req.flash('success', 'Your post was succesfully created!');
-                res.redirect('/');
-            } else {
-                throw new PostError('Post could not be created!', '/postimage', 200);
-            }
+    } else if (description == '' || description == null) {
+        req.flash('error', 'Please enter a description for your post.');
+        req.session.save(err => {
+            res.redirect('/postimage');
         })
-        .catch((err) => {
-            if (err instanceof PostError) {
-                errorPrint('Failed to create post.')
-                req.flash('error', err.getMessage());
-                res.status(err.getStatus());
-                res.redirect(err.getRedirectURL());
-            } else {
-                next(err);
-            }
+    } else if (fileForValidationCheck == null) {
+        req.flash('error', 'Please select an image to upload for your post.');
+        req.session.save(err => {
+            res.redirect('/postimage');
         })
+    } else {
+
+        let fileUploaded = req.file.path;
+        let fileAsThumbnail = `thumbnail-${req.file.filename}`;
+        let desinationOfThumbnail = req.file.destination + "/" + fileAsThumbnail;
+        let fk_userId = req.session.userId;
+        
+        sharp(fileUploaded)
+            .resize(200)
+            .toFile(desinationOfThumbnail)
+            .then(() => {
+                return PostModel.create(title, description, fileUploaded, desinationOfThumbnail, fk_userId);
+            })
+            .then((postWasCreated) => {
+                if (postWasCreated) {
+                    req.flash('success', 'Your post was succesfully created!');
+                    res.redirect('/');
+                } else {
+                    throw new PostError('Post could not be created!', '/postimage', 200);
+                }
+            })
+            .catch((err) => {
+                if (err instanceof PostError) {
+                    errorPrint('Failed to create post.')
+                    req.flash('error', err.getMessage());
+                    res.status(err.getStatus());
+                    res.redirect(err.getRedirectURL());
+                } else {
+                    next(err);
+                }
+            })
+    }
 });
 
 router.get('/search', (req, res, next) => {

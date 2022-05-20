@@ -20,36 +20,45 @@ router.post('/login', (req, res, next) => {
   let username = req.body.username;
   let password = req.body.password;
 
-  /* Do server side validation here */
-  // about to do server side validation
 
-
-
-  UserModel.authenticate(username, password)
-    .then((loggedUserId) => {
-      if (loggedUserId > 0) {
-        successPrint(`User ${username} is logged in`);
-        req.session.username = username;
-        req.session.userId = loggedUserId;
-        res.locals.logged = true;
-        req.flash('success', 'You have sucessfully logged in!');
-        res.redirect('/');
-      } else {
-        throw new UserError("Invalid username and/or password!", "/login", 200);
-      }
+  // server-side validation
+  if (username == '' || username == null) {
+    req.flash('error', 'Please enter your username.');
+    req.session.save(err => {
+      res.redirect('/login');
     })
-    .catch((err) => {
-      errorPrint("user login failed");
-      if (err instanceof UserError) {
-        errorPrint(err.getMessage());
-        req.flash('error', err.getMessage());
-        res.status(err.getStatus());
-        res.redirect('/login')
-      } else {
-        next(err);
-      }
-    });
+  } else if (password == '' || password == null) {
+    req.flash('error', 'Please enter your password.');
+    req.session.save(err => {
+      res.redirect('/login');
+    })
+  } else {
 
+    UserModel.authenticate(username, password)
+      .then((loggedUserId) => {
+        if (loggedUserId > 0) {
+          successPrint(`User ${username} is logged in`);
+          req.session.username = username;
+          req.session.userId = loggedUserId;
+          res.locals.logged = true;
+          req.flash('success', 'You have sucessfully logged in!');
+          res.redirect('/');
+        } else {
+          throw new UserError("Invalid username and/or password!", "/login", 200);
+        }
+      })
+      .catch((err) => {
+        errorPrint("user login failed");
+        if (err instanceof UserError) {
+          errorPrint(err.getMessage());
+          req.flash('error', err.getMessage());
+          res.status(err.getStatus());
+          res.redirect('/login')
+        } else {
+          next(err);
+        }
+      });
+  }
 });
 
 router.post('/register', (req, res, next) => {
