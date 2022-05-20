@@ -11,7 +11,7 @@
             <ul class="list-group list-group-flush">
 
                 <li class="list-group-item"><small>POST AUTHOR: </small>{{currentPost.username}}</li>
-                <li class="list-group-item"><small>TIME CREATED: </small>{{currentPost.created}}</li>
+                <li class="list-group-item"><small>TIME CREATED: </small><span class="date-posted">{{currentPost.created}}</span></li>
             </ul>
         </div>
     </div>
@@ -56,6 +56,15 @@
 </div>
 
 <script>
+
+    // date fixing JS
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('span[class=date-posted]').forEach((postedDate) => {
+            postedDate.textContent = new Date(postedDate.textContent).toLocaleString();
+        })
+    });
+
 
     // comments JS
 
