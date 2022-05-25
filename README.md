@@ -1,4 +1,4 @@
-# Imjur — The Photo Sharing App
+# Imjur — A Photo Sharing App
 
 ## About
 
