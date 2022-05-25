@@ -1,10 +1,10 @@
 # Imjur — The Photo Sharing App
 
-## Purpose
+## About
 
-The purpose of this repository is to store all the code for your web application. This also includes the history of all commits made and who made them. Only code submitted on the master branch will be graded.
+This was my first time doing an end to end build of a full-stack web app. I've used node & express on the backend, and HTML (with handlebars), bootstrap, and vanilla JS on the frontend.
 
-# Build/Run Instructions
+##
 
 ## Build Instructions
 1. npm install
