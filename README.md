@@ -2,7 +2,7 @@
 
 ## About
 
-This was my first time doing an end to end build of a full-stack web app. I've used node & express on the backend, and HTML (with handlebars), bootstrap, and vanilla JS on the frontend.
+This is an attempt at an end-to-end build of a full-stack web app using node & express on the backend, and HTML (with handlebars), bootstrap, and vanilla JS on the frontend.
 
 ##
 
